@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/gommon/log"
 	"github.com/markusressel/polybar-addons/util"
 	"strings"
 )
@@ -23,7 +22,7 @@ func main() {
 	//if devicePath == nil {
 	devices := getBatteryDevices()
 	if len(devices) <= 0 {
-		log.Fatalf("No battery")
+		fmt.Printf("No battery")
 	}
 	devicePath = strings.TrimSpace(devices[0])
 	//}
@@ -31,7 +30,7 @@ func main() {
 	// get value
 	result, err := util.ExecCommand("upower", "-i", fmt.Sprintf("%s", devicePath))
 	if err != nil {
-		log.Error(err)
+		fmt.Printf("%v", err)
 	}
 	lines := strings.SplitAfter(result, "\n")
 
@@ -54,6 +53,7 @@ func main() {
 func getBatteryDevices() []string {
 	result, err := util.ExecCommand("upower", "-e")
 	if err != nil {
+		fmt.Printf("%v", err)
 		return []string{}
 	}
 
