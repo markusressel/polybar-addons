@@ -2,95 +2,99 @@ package main
 
 import (
 	"fmt"
-	"github.com/markusressel/polybar-addons/util"
-	"strings"
+	util "github.com/markusressel/polybar-addons/internal/util"
 )
 
 // Outputs the remaining time to fully charge/discharge a battery
 //
 // Examples:
-//
-//	>> python3 battery_time.py
-//	1,8 hours
-//
-//	>> python3 battery_time.py -d "/org/freedesktop/UPower/devices/battery_BAT1"
-//	1,8 hours
+// > battery
+// 00:45
 func main() {
 	// TODO: optional -d --device parameter
-
-	var devicePath string
-	//if devicePath == nil {
-	devices := getBatteryDevices()
-	if len(devices) <= 0 {
-		fmt.Printf("No battery")
-	}
-	devicePath = strings.TrimSpace(devices[0])
-	//}
+	battery := "BAT0"
 
 	// get value
-	result, err := util.ExecCommand("upower", "-i", fmt.Sprintf("%s", devicePath))
+	charging, err := isBatteryCharging(battery)
 	if err != nil {
-		fmt.Printf("%v", err)
+		fmt.Printf("ERR")
+		return
 	}
-	lines := strings.SplitAfter(result, "\n")
-
-	filterFunc := func(s string) bool {
-		return strings.Contains(strings.ToLower(s), "state") ||
-			strings.Contains(strings.ToLower(s), "to\\ full") ||
-			strings.Contains(strings.ToLower(s), "to\\ empty")
+	energyTarget, err := getEnergyTarget(battery)
+	if err != nil {
+		fmt.Printf("ERR")
+		return
 	}
-	lines2 := filter(lines, filterFunc)
-	state := findState(lines2)
+	energyNow, err := getEnergyNow(battery)
+	if err != nil {
+		fmt.Printf("ERR")
+		return
+	}
+	powerNow, err := getPowerNow(battery)
+	if err != nil {
+		fmt.Printf("ERR")
+		return
+	}
+	if err != nil {
+		fmt.Printf("ERR")
+		return
+	}
 
-	if state == "fully-charged" {
-		fmt.Printf("")
+	if powerNow == 0 {
+		fmt.Printf("∞")
+		return
+	}
+
+	var remainingTimeInSeconds int
+	if charging == true {
+		remainingTimeInSeconds = calculateRemainingTime(energyTarget-energyNow, powerNow)
 	} else {
-		timeRemaining := findTimeRemaining(lines)
-		fmt.Printf("%s", timeRemaining)
+		remainingTimeInSeconds = calculateRemainingTime(energyNow, powerNow)
 	}
+
+	remainingHours := (remainingTimeInSeconds / 60 / 60) % 24
+	remainingMinutes := (remainingTimeInSeconds / 60) % 60
+
+	fmt.Printf("%02d:%02d", remainingHours, remainingMinutes)
 }
 
-func getBatteryDevices() []string {
-	result, err := util.ExecCommand("upower", "-e")
+func getEnergyTarget(battery string) (int, error) {
+	chargeControlEndThreshold := getChargeControlEndThreshold(battery)
+	energyFull, err := getEnergyFull(battery)
+	return int((float64(energyFull) / 100) * float64(chargeControlEndThreshold)), err
+}
+
+func getChargeControlEndThreshold(battery string) int {
+	path := "/sys/class/power_supply/" + battery + "/charge_control_end_threshold"
+	value, err := util.ReadIntFromFile(path)
 	if err != nil {
-		fmt.Printf("%v", err)
-		return []string{}
+		value = 100
 	}
-
-	lines := strings.SplitAfter(result, "\n")
-	filterFunc := func(s string) bool { return strings.Contains(strings.ToLower(s), "bat") }
-	return filter(lines, filterFunc)
+	return value
 }
 
-func findState(result []string) string {
-	filterFunc := func(s string) bool { return strings.Contains(strings.ToLower(s), "state") }
-	lines := filter(result, filterFunc)
-	if len(lines) <= 0 {
-		return "Calculating..."
-	}
-	line := lines[0]
-	state := strings.Split(line, ":")[1]
-	state = strings.TrimSpace(state)
-	return state
+func calculateRemainingTime(wh int, w int) int {
+	return int((float64(wh) / float64(w)) * 60 * 60)
 }
 
-func findTimeRemaining(result []string) string {
-	filterFunc := func(s string) bool { return strings.Contains(strings.ToLower(s), "time to") }
-	lines := filter(result, filterFunc)
-	if len(lines) <= 0 {
-		return "Calculating..."
-	}
-	line := lines[0]
-	state := strings.Split(line, ":")[1]
-	state = strings.TrimSpace(state)
-	return state
+func isBatteryCharging(battery string) (bool, error) {
+	path := "/sys/class/power_supply/" + battery + "/status"
+	status, err := util.ReadTextFromFile(path)
+	charging := status == "Charging"
+	return charging, err
 }
 
-func filter(ss []string, test func(string) bool) (ret []string) {
-	for _, s := range ss {
-		if test(s) {
-			ret = append(ret, s)
-		}
-	}
-	return
+func getEnergyFull(battery string) (int, error) {
+	path := "/sys/class/power_supply/" + battery + "/energy_full"
+	return util.ReadIntFromFile(path)
+}
+
+func getEnergyNow(battery string) (int, error) {
+	path := "/sys/class/power_supply/" + battery + "/energy_now"
+	return util.ReadIntFromFile(path)
+}
+
+func getPowerNow(battery string) (int, error) {
+	path := "/sys/class/power_supply/" + battery + "/power_now"
+	return util.ReadIntFromFile(path)
 }
