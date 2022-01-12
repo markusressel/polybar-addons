@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-	util "github.com/markusressel/polybar-addons/internal/util"
+	"github.com/markusressel/polybar-addons/internal/util"
+	"math"
+	"strings"
 )
 
 // Outputs the remaining time to fully charge/discharge a battery
@@ -52,7 +54,7 @@ func main() {
 		remainingTimeInSeconds = calculateRemainingTime(energyNow, powerNow)
 	}
 
-	remainingHours := (remainingTimeInSeconds / 60 / 60) % 24
+	remainingHours := int(math.Min(99, float64(remainingTimeInSeconds/60/60)))
 	remainingMinutes := (remainingTimeInSeconds / 60) % 60
 
 	fmt.Printf("%02d:%02d", remainingHours, remainingMinutes)
@@ -80,6 +82,7 @@ func calculateRemainingTime(wh int, w int) int {
 func isBatteryCharging(battery string) (bool, error) {
 	path := "/sys/class/power_supply/" + battery + "/status"
 	status, err := util.ReadTextFromFile(path)
+	status = strings.TrimSpace(status)
 	charging := status == "Charging"
 	return charging, err
 }
