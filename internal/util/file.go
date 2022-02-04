@@ -4,9 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 )
+
+func WriteTextToFile(text string, path string) (err error) {
+	return os.WriteFile(path, []byte(text), 0666)
+}
 
 func ReadTextFromFile(path string) (value string, err error) {
 	data, err := ioutil.ReadFile(path)
