@@ -96,7 +96,7 @@ func aggregate(stats []StatItem) (int64, int64) {
 }
 
 func getMainStats(stats []StatItem) []StatItem {
-	pattern := regexp.MustCompile("^(nvme\\dn\\d)|(sd[a-z])$")
+	pattern := regexp.MustCompile("^nvme\\dn\\d$|^sd[a-z]$")
 
 	var result []StatItem
 	for _, stat := range stats {
