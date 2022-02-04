@@ -60,14 +60,24 @@ func FormatDataRate(bytesPerMilliSecond float64) string {
 		prefix = "  "
 	}
 
-	formattedValue := betterFormat(value)
+	formattedValue := fixedDecimalPlacesFormat(value, decimalPlaces)
 
 	result := fmt.Sprintf("%s %s%s", prefix, formattedValue, unit)
 
 	return result
 }
 
-func betterFormat(num float64) string {
-	s := fmt.Sprintf("%.4f", num)
-	return strings.TrimRight(strings.TrimRight(s, "0"), ".")
+func fixedDecimalPlacesFormat(num float64, places int) string {
+	s := fmt.Sprintf("%f", num)
+
+	splits := strings.Split(s, ".")
+	commaPlaces := splits[1]
+
+	existingPlaces := int(math.Min(float64(len(commaPlaces)), float64(places)))
+
+	result := splits[0] + "." + commaPlaces[0:existingPlaces]
+	if existingPlaces < places {
+		result += strings.Repeat("0", places-existingPlaces)
+	}
+	return result
 }
