@@ -51,8 +51,6 @@ func main() {
 	formattedWrites := util.FormatDataRate(writesSinceLast)
 
 	fmt.Printf("\uE2C6%s \uE2C4%s\n", formattedReads, formattedWrites)
-
-	time.Sleep(100 * time.Millisecond)
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {
