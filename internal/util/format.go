@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strings"
+	"time"
 )
 
 const (
@@ -12,12 +13,12 @@ const (
 	BytesInGigabyte = BytesInMegabyte * 1024
 )
 
-func FormatDataRate(bytesPerMilliSecond float64) string {
+func FormatDataRate(bytes int64, duration time.Duration) string {
 	decimalPlaces := 1
 	unit := " B/s"
 	unitFactor := 1.0
 
-	bytesPerSecond := bytesPerMilliSecond / 1000
+	bytesPerSecond := float64(bytes) / duration.Seconds()
 
 	if bytesPerSecond >= BytesInKilobyte/10 {
 		decimalPlaces = 1

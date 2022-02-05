@@ -42,13 +42,13 @@ func main() {
 	lastTotalReads, lastTotalWrites := aggregate(lastStats)
 	currTotalReads, currTotalWrites := aggregate(currentStats)
 
-	diff := time.Now().Sub(lastTime).Milliseconds()
+	diff := time.Now().Sub(lastTime)
 
-	readsSinceLast := float64(currTotalReads-lastTotalReads) / float64(diff)
-	writesSinceLast := float64(currTotalWrites-lastTotalWrites) / float64(diff)
+	readsSinceLast := currTotalReads - lastTotalReads
+	writesSinceLast := currTotalWrites - lastTotalWrites
 
-	formattedReads := util.FormatDataRate(readsSinceLast)
-	formattedWrites := util.FormatDataRate(writesSinceLast)
+	formattedReads := util.FormatDataRate(readsSinceLast, diff)
+	formattedWrites := util.FormatDataRate(writesSinceLast, diff)
 
 	fmt.Printf("\uE2C6%s \uE2C4%s\n", formattedReads, formattedWrites)
 }
