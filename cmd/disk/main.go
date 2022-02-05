@@ -54,8 +54,14 @@ func main() {
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {
-	finfo, _ := os.Stat(TmpStatsFilePath)
+	finfo, err := os.Stat(TmpStatsFilePath)
+	if err != nil {
+		return nil, time.Time{}, err
+	}
 	stats, err := getStats(TmpStatsFilePath)
+	if err != nil {
+		return nil, time.Time{}, err
+	}
 	return stats, finfo.ModTime(), err
 }
 
