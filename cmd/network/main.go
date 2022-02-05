@@ -12,17 +12,14 @@ import (
 const (
 	NetStatPath      = "/proc/net/dev"
 	TmpStatsFilePath = "/dev/shm/network_traffic_last_state"
-
-	// SectorSize see: https://stackoverflow.com/questions/37248948/how-to-get-disk-read-write-bytes-per-second-from-proc-in-programming-on-linux
-	SectorSize = 512
 )
 
-// Outputs the current disk IO
+// Outputs the current network IO
 //
 //
 // Examples:
-// > disk
-//    0 B/s   16.3 B/s
+// > network
+//    0 B/s   16.3 B/s
 //
 func main() {
 	lastStats, lastTime, err := loadLastStats()
@@ -38,18 +35,18 @@ func main() {
 		return
 	}
 
-	lastTotalReads, lastTotalWrites := aggregate(lastStats)
-	currTotalReads, currTotalWrites := aggregate(currentStats)
+	lastTotalReceived, lastTotalTransmitted := aggregate(lastStats)
+	currTotalReceived, currTotalTransmitted := aggregate(currentStats)
 
 	diff := time.Now().Sub(lastTime)
 
-	readsSinceLast := currTotalReads - lastTotalReads
-	writesSinceLast := currTotalWrites - lastTotalWrites
+	receivedSinceLast := currTotalReceived - lastTotalReceived
+	transmittedSinceLast := currTotalTransmitted - lastTotalTransmitted
 
-	formattedReads := util.FormatDataRate(readsSinceLast, diff)
-	formattedWrites := util.FormatDataRate(writesSinceLast, diff)
+	formattedReceived := util.FormatDataRate(receivedSinceLast, diff)
+	formattedTransmitted := util.FormatDataRate(transmittedSinceLast, diff)
 
-	fmt.Printf("\uE2C6%s \uE2C4%s\n", formattedReads, formattedWrites)
+	fmt.Printf("\uE2C4%s \uE2C6%s\n", formattedReceived, formattedTransmitted)
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {
@@ -94,7 +91,7 @@ func aggregate(stats []StatItem) (int64, int64) {
 	return totalReceived, totalTransmitted
 }
 
-// StatItem https://www.kernel.org/doc/Documentation/iostats.txt
+// StatItem https://www.kernel.org/doc/html/latest/networking/statistics.html
 type StatItem struct {
 	device string
 
