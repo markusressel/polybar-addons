@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
@@ -14,9 +15,7 @@ func TestFormatDataRateBytesSingleDigit(t *testing.T) {
 	result := FormatDataRate(bytes, duration)
 
 	// THEN
-	if result != "   5.0 B/s" {
-		t.Fail()
-	}
+	assert.Equal(t, "   5.0 B/s", result)
 }
 
 func TestFormatDataRateBytesDoubleDigit(t *testing.T) {
@@ -28,9 +27,7 @@ func TestFormatDataRateBytesDoubleDigit(t *testing.T) {
 	result := FormatDataRate(bytes, duration)
 
 	// THEN
-	if result != "  50.0 B/s" {
-		t.Fail()
-	}
+	assert.Equal(t, "  50.0 B/s", result)
 }
 
 func TestFormatDataRateKBytes(t *testing.T) {
@@ -42,9 +39,7 @@ func TestFormatDataRateKBytes(t *testing.T) {
 	result := FormatDataRate(bytes, duration)
 
 	// THEN
-	if result != "   0.5KB/s" {
-		t.Fail()
-	}
+	assert.Equal(t, "   0.5KB/s", result)
 }
 
 func TestFormatDataRateMBytes(t *testing.T) {
@@ -56,7 +51,5 @@ func TestFormatDataRateMBytes(t *testing.T) {
 	result := FormatDataRate(bytes, duration)
 
 	// THEN
-	if result != " 500.0KB/s" {
-		t.Fail()
-	}
+	assert.Equal(t, " 500.0KB/s", result)
 }
