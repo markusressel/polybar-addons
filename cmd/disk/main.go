@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	DiskStatsPath        = "/proc/diskstats"
-	TmpDiskStatsFilePath = "/dev/shm/disk_traffic_last_stats"
+	DiskStatsPath    = "/proc/diskstats"
+	TmpStatsFilePath = "/dev/shm/disk_traffic_last_stats"
 
 	// SectorSize see: https://stackoverflow.com/questions/37248948/how-to-get-disk-read-write-bytes-per-second-from-proc-in-programming-on-linux
 	SectorSize = 512
@@ -54,8 +54,8 @@ func main() {
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {
-	finfo, _ := os.Stat(TmpDiskStatsFilePath)
-	stats, err := getStats(TmpDiskStatsFilePath)
+	finfo, _ := os.Stat(TmpStatsFilePath)
+	stats, err := getStats(TmpStatsFilePath)
 	return stats, finfo.ModTime(), err
 }
 
@@ -82,7 +82,7 @@ func updateLastStats() error {
 	if err != nil {
 		return err
 	}
-	return util.WriteTextToFile(text, TmpDiskStatsFilePath)
+	return util.WriteTextToFile(text, TmpStatsFilePath)
 }
 
 func aggregate(stats []StatItem) (int64, int64) {
