@@ -28,10 +28,6 @@ const (
 func main() {
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()
-	if err != nil {
-		fmt.Printf("Calculating...")
-		return
-	}
 
 	currentStats, err := getCurrentStats()
 	if err != nil {
@@ -39,7 +35,13 @@ func main() {
 		return
 	}
 
-	lastTotalReads, lastTotalWrites := aggregate(lastStats)
+	var lastTotalReads, lastTotalWrites int64
+	if lastStats != nil {
+		lastTotalReads, lastTotalWrites = aggregate(lastStats)
+	} else {
+		lastTotalReads, lastTotalWrites = 0, 0
+	}
+
 	currTotalReads, currTotalWrites := aggregate(currentStats)
 
 	diff := time.Now().Sub(lastTime)

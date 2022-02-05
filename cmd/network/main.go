@@ -24,10 +24,6 @@ const (
 func main() {
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()
-	if err != nil {
-		fmt.Printf("Calculating...")
-		return
-	}
 
 	currentStats, err := getCurrentStats()
 	if err != nil {
@@ -35,7 +31,13 @@ func main() {
 		return
 	}
 
-	lastTotalReceived, lastTotalTransmitted := aggregate(lastStats)
+	var lastTotalReceived, lastTotalTransmitted int64
+	if lastStats != nil {
+		lastTotalReceived, lastTotalTransmitted = aggregate(lastStats)
+	} else {
+		lastTotalReceived, lastTotalTransmitted = 0, 0
+	}
+
 	currTotalReceived, currTotalTransmitted := aggregate(currentStats)
 
 	diff := time.Now().Sub(lastTime)
