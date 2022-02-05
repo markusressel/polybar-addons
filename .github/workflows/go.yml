@@ -24,9 +24,9 @@ jobs:
         run: mkdir dist
 
       - name: Build
-        run: go build -o ./dist/battery-linux-amd64 ./cmd/battery/main.go
+        run: go build -ldflags="-s -w" -o ./dist/battery-linux-amd64 ./cmd/battery/main.go
       - name: Build
-        run: go build -o ./dist/disk-linux-amd64 ./cmd/disk/main.go
+        run: go build -ldflags="-s -w" -o ./dist/disk-linux-amd64 ./cmd/disk/main.go
 
       - name: Release
         uses: softprops/action-gh-release@v1
