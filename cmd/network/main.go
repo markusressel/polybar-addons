@@ -22,7 +22,12 @@ const (
 //    4.0KB/s    5.2KB/s
 //
 func main() {
-	template := os.Args[1]
+	var template string
+	if len(os.Args[1:]) <= 0 {
+		template = "\uE2C4%received% \uE2C6%transmitted%"
+	} else {
+		template = os.Args[1]
+	}
 
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()

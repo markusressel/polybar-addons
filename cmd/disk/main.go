@@ -26,7 +26,12 @@ const (
 //    0.0 B/s    7.6MB/s
 //
 func main() {
-	template := os.Args[1]
+	var template string
+	if len(os.Args[1:]) <= 0 {
+		template = "\uE2C6%reads% \uE2C4%writes%"
+	} else {
+		template = os.Args[1]
+	}
 
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()
