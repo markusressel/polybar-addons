@@ -7,6 +7,7 @@ build: clean
 	go build -o bin/zfs ./cmd/zfs/main.go
 
 deploy:	build
+	mkdir -p ~/.config/polybar/scripts
 	cp ./bin/* ~/.config/polybar/scripts/
 
 clean:

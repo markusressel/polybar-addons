@@ -43,3 +43,29 @@ Placeholders must be prefixed with the name of the target pool.
 | %rpool.cap%   | `25%`   | Used pool capacity in percent. |
 | %rpool.total% | `1TB`   | Total pool size.               |
 
+# How to use
+
+To build and copy all executables to `~/.config/polybar/scripts`
+
+```shell
+git clone https://github.com/markusressel/polybar-addons.git
+cd polybar-addons
+make deploy
+```
+
+Then in your polybar config you can use them like this:
+
+```
+
+modules-right = your_name_of_choice
+
+[...]
+
+[module/your_name_of_choice]
+type = custom/script
+exec = ~/.config/polybar/scripts/battery
+interval = 2
+
+[...]
+
+```
