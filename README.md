@@ -26,7 +26,7 @@ modules-right = your_name_of_choice
 
 [module/your_name_of_choice]
 type = custom/script
-exec = ~/.config/polybar/scripts/battery
+exec = ~/.config/polybar/scripts/battery "%{F00C853}%hours%:%minutes%%{FDFDFDF}"
 interval = 2
 
 [...]
@@ -45,6 +45,15 @@ Example:
 > disk "Read: %reads% Write: %writes%"
 Read:   27.2KB/s Write:    2.7MB/s
 ```
+
+Since the output of these programs is passed to polybar, you can also include color codes within the template:
+
+```shell
+> disk "%{F00C853}Read: %reads% Write: %writes%%{FDFDFDF}"
+"%{F00C853}Read:   27.2KB/s Write:    2.7MB/s{FDFDFDF}"
+```
+
+Color codes are simply passed on to polybar, which will parse and use them to color the output accordingly.
 
 ## Programs
 
