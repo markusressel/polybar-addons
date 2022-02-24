@@ -1,6 +1,6 @@
 # polybar-addons
 
-This repo contains a number of utility programs I use in my [polybar][] setup.
+This repo contains a number of utility programs I use in my [polybar] setup.
 
 ## Programs
 
