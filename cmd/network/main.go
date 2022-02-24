@@ -18,13 +18,13 @@ const (
 //
 //
 // Examples:
-// > network "↓%received% %transmitted%"
-// ↓   4.0KB/s    5.2KB/s
+// > network "↓%received% ↑%transmitted%"
+// ↓   4.0KB/s ↑   5.2KB/s
 //
 func main() {
 	var template string
 	if len(os.Args[1:]) <= 0 {
-		template = "↓%received% \uE2C6%transmitted%"
+		template = "↓%received% ↑%transmitted%"
 	} else {
 		template = os.Args[1]
 	}

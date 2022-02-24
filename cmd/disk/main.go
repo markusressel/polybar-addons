@@ -28,7 +28,7 @@ const (
 func main() {
 	var template string
 	if len(os.Args[1:]) <= 0 {
-		template = "\uE2C6%reads% \uE2C4%writes%"
+		template = "↑%reads% ↓%writes%"
 	} else {
 		template = os.Args[1]
 	}
