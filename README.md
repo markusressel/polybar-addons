@@ -70,4 +70,4 @@ interval = 2
 
 ```
 
-[polybar]: https://github.com/polybar/polybar "polybar"
+[polybar]: https://github.com/polybar/polybar
