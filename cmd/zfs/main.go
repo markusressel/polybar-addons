@@ -14,7 +14,12 @@ import (
 // 5% (3.54G) | 21% (725G)
 //
 func main() {
-	template := os.Args[1]
+	var template string
+	if len(os.Args[1:]) <= 0 {
+		template = ""
+	} else {
+		template = os.Args[1]
+	}
 
 	stats, err := readStats()
 	if err != nil {
@@ -28,6 +33,17 @@ func main() {
 		placeholders[stat.name+"."+"used"] = stat.alloc
 		placeholders[stat.name+"."+"cap"] = stat.cap
 		placeholders[stat.name+"."+"total"] = stat.size
+	}
+
+	if len(template) <= 0 {
+		templates := []string{}
+
+		for _, stat := range stats {
+			template := stat.name + ": %" + stat.name + ".cap% (%" + stat.name + ".used%/%" + stat.name + ".total%)"
+			templates = append(templates, template)
+		}
+
+		template = strings.Join(templates, " | ")
 	}
 
 	result := util.ReplacePlaceholders(template, placeholders)
