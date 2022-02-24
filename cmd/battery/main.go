@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/markusressel/polybar-addons/internal/util"
 	"math"
+	"os"
 	"strings"
 )
 
@@ -13,6 +14,13 @@ import (
 // > battery
 // 00:45
 func main() {
+	var template string
+	if len(os.Args[1:]) <= 0 {
+		template = "%hours%:%minutes%"
+	} else {
+		template = os.Args[1]
+	}
+
 	// TODO: optional -d --device parameter
 	battery := "BAT0"
 
@@ -57,7 +65,13 @@ func main() {
 	remainingHours := int(math.Min(99, float64(remainingTimeInSeconds/60/60)))
 	remainingMinutes := (remainingTimeInSeconds / 60) % 60
 
-	fmt.Printf("%02d:%02d", remainingHours, remainingMinutes)
+	placeholders := map[string]string{}
+	placeholders["hours"] = fmt.Sprintf("%02d", remainingHours)
+	placeholders["minutes"] = fmt.Sprintf("%02d", remainingMinutes)
+
+	result := util.ReplacePlaceholders(template, placeholders)
+
+	fmt.Print(result)
 }
 
 func getEnergyTarget(battery string) (int, error) {

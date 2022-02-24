@@ -18,10 +18,12 @@ const (
 //
 //
 // Examples:
-// > network
-//    0 B/s   16.3 B/s
+// > network "%received% %transmitted%"
+//    4.0KB/s    5.2KB/s
 //
 func main() {
+	template := os.Args[1]
+
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()
 
@@ -48,7 +50,13 @@ func main() {
 	formattedReceived := util.FormatDataRate(receivedSinceLast, diff)
 	formattedTransmitted := util.FormatDataRate(transmittedSinceLast, diff)
 
-	fmt.Printf("\uE2C4%s \uE2C6%s\n", formattedReceived, formattedTransmitted)
+	placeholders := map[string]string{}
+	placeholders["received"] = formattedReceived
+	placeholders["transmitted"] = formattedTransmitted
+
+	result := util.ReplacePlaceholders(template, placeholders)
+
+	fmt.Print(result)
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {

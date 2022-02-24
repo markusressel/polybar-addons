@@ -82,3 +82,11 @@ func fixedDecimalPlacesFormat(num float64, places int) string {
 	}
 	return result
 }
+
+func ReplacePlaceholders(template string, placeholders map[string]string) string {
+	result := template
+	for key, value := range placeholders {
+		result = strings.ReplaceAll(result, "%"+key+"%", value)
+	}
+	return result
+}

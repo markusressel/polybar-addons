@@ -22,10 +22,12 @@ const (
 //
 //
 // Examples:
-// > disk
-//    0 B/s   16.3 B/s
+// > disk "%reads% %writes%"
+//    0.0 B/s    7.6MB/s
 //
 func main() {
+	template := os.Args[1]
+
 	lastStats, lastTime, err := loadLastStats()
 	_ = updateLastStats()
 
@@ -52,7 +54,13 @@ func main() {
 	formattedReads := util.FormatDataRate(readsSinceLast, diff)
 	formattedWrites := util.FormatDataRate(writesSinceLast, diff)
 
-	fmt.Printf("\uE2C6%s \uE2C4%s\n", formattedReads, formattedWrites)
+	placeholders := map[string]string{}
+	placeholders["reads"] = formattedReads
+	placeholders["writes"] = formattedWrites
+
+	result := util.ReplacePlaceholders(template, placeholders)
+
+	fmt.Print(result)
 }
 
 func loadLastStats() ([]StatItem, time.Time, error) {
