@@ -22,8 +22,8 @@ const (
 //
 //
 // Examples:
-// > disk "%reads% %writes%"
-//    0.0 B/s    7.6MB/s
+// > disk "↑%reads% ↓%writes%"
+// ↑   0.0 B/s ↓   7.6MB/s
 //
 func main() {
 	var template string
