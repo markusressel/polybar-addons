@@ -2,59 +2,6 @@
 
 This repo contains a number of utility programs I use in my [polybar] setup.
 
-## How to use
-
-### Build and "Install" (copy to home)
-
-To build and copy all executables to `~/.config/polybar/scripts`
-
-```shell
-git clone https://github.com/markusressel/polybar-addons.git
-cd polybar-addons
-make deploy
-```
-
-### Polybar Config
-
-Then in your polybar config you can use them like this:
-
-```
-
-modules-right = your_name_of_choice
-
-[...]
-
-[module/your_name_of_choice]
-type = custom/script
-exec = ~/.config/polybar/scripts/battery "%{F00C853}%hours%:%minutes%%{FDFDFDF}"
-interval = 2
-
-[...]
-
-```
-
-### Templating
-
-Although all programs have a default output, they also accept an optional "template" string. You can use this template
-to modify how the data gathered by the programs is printed. A description of available template placeholders can be
-found below.
-
-Example:
-
-```shell
-> disk "Read: %reads% Write: %writes%"
-Read:   27.2KB/s Write:    2.7MB/s
-```
-
-Since the output of these programs is passed to polybar, you can also include color codes within the template:
-
-```shell
-> disk "%{F00C853}Read: %reads% Write: %writes%%{FDFDFDF}"
-%{F00C853}Read:   27.2KB/s Write:    2.7MB/s{FDFDFDF}
-```
-
-Color codes are simply passed on to polybar, which will parse and use them to color the output accordingly.
-
 ## Programs
 
 | Name      | Example                  | Description                                                          |
@@ -96,5 +43,59 @@ Placeholders must be prefixed with the name of the target pool.
 | `%rpool.cap%`   | `25%`   | Used pool capacity in percent. |
 | `%rpool.total%` | `1TB`   | Total pool size.               |
 
+
+### Templating
+
+Although all programs have a default output, they also accept an optional "template" string. You can use this template
+to modify how the data gathered by the programs is printed. A description of available template placeholders can be
+found below.
+
+Example:
+
+```shell
+> disk "Read: %reads% Write: %writes%"
+Read:   27.2KB/s Write:    2.7MB/s
+```
+
+Since the output of these programs is passed to polybar, you can also include color codes within the template:
+
+```shell
+> disk "%{F00C853}Read: %reads% Write: %writes%%{FDFDFDF}"
+%{F00C853}Read:   27.2KB/s Write:    2.7MB/s{FDFDFDF}
+```
+
+Color codes are simply passed on to polybar, which will parse and use them to color the output accordingly.
+
+
+## How to use
+
+### Build and "Install" (copy to home)
+
+To build and copy all executables to `~/.config/polybar/scripts`
+
+```shell
+git clone https://github.com/markusressel/polybar-addons.git
+cd polybar-addons
+make deploy
+```
+
+### Polybar Config
+
+Then in your polybar config you can use them like this:
+
+```
+
+modules-right = your_name_of_choice
+
+[...]
+
+[module/your_name_of_choice]
+type = custom/script
+exec = ~/.config/polybar/scripts/battery "%{F00C853}%hours%:%minutes%%{FDFDFDF}"
+interval = 2
+
+[...]
+
+```
 
 [polybar]: https://github.com/polybar/polybar
