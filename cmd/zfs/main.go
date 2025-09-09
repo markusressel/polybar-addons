@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/markusressel/polybar-addons/internal/util"
 	"os"
 	"strings"
+
+	"github.com/markusressel/polybar-addons/internal/util"
 )
 
 // Outputs ZFS pool stats
@@ -12,7 +13,6 @@ import (
 // Examples:
 // > zfs "%bpool.cap% (%bpool.free%) | %rpool.cap% (%rpool.free%)"
 // 5% (3.54G) | 21% (725G)
-//
 func main() {
 	var template string
 	if len(os.Args[1:]) <= 0 {

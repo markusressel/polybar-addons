@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/markusressel/polybar-addons/internal/util"
 	"math"
 	"os"
 	"strings"
+
+	"github.com/markusressel/polybar-addons/internal/util"
 )
 
 // Outputs the remaining time to fully charge/discharge a battery
@@ -41,10 +42,6 @@ func main() {
 		return
 	}
 	powerNow, err := getPowerNow(battery)
-	if err != nil {
-		fmt.Printf("ERR")
-		return
-	}
 	if err != nil {
 		fmt.Printf("ERR")
 		return

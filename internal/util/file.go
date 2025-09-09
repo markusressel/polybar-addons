@@ -3,7 +3,6 @@ package util
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -14,7 +13,7 @@ func WriteTextToFile(text string, path string) (err error) {
 }
 
 func ReadTextFromFile(path string) (value string, err error) {
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
@@ -22,7 +21,7 @@ func ReadTextFromFile(path string) (value string, err error) {
 }
 
 func ReadIntFromFile(path string) (value int, err error) {
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return -1, err
 	}

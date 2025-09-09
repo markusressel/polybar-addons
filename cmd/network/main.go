@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/markusressel/polybar-addons/internal/util"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/markusressel/polybar-addons/internal/util"
 )
 
 const (
@@ -16,11 +17,9 @@ const (
 
 // Outputs the current network IO
 //
-//
 // Examples:
 // > network "↓%received% ↑%transmitted%"
 // ↓   4.0KB/s ↑   5.2KB/s
-//
 func main() {
 	var template string
 	if len(os.Args[1:]) <= 0 {

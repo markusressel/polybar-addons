@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/markusressel/polybar-addons/internal/util"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/markusressel/polybar-addons/internal/util"
 )
 
 const (
@@ -20,11 +21,9 @@ const (
 
 // Outputs the current disk IO
 //
-//
 // Examples:
 // > disk "↑%reads% ↓%writes%"
 // ↑   0.0 B/s ↓   7.6MB/s
-//
 func main() {
 	var template string
 	if len(os.Args[1:]) <= 0 {
