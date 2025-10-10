@@ -27,6 +27,10 @@ jobs:
         run: go build -ldflags="-s -w" -o ./dist/battery-linux-amd64 ./cmd/battery/main.go
       - name: Build
         run: go build -ldflags="-s -w" -o ./dist/disk-linux-amd64 ./cmd/disk/main.go
+      - name: Build
+        run: go build -ldflags="-s -w" -o ./dist/network-linux-amd64 ./cmd/network/main.go
+      - name: Build
+        run: go build -ldflags="-s -w" -o ./dist/zfs-linux-amd64 ./cmd/zfs/main.go
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -35,5 +39,7 @@ jobs:
           files: |
             dist/battery-linux-amd64
             dist/disk-linux-amd64
+            dist/network-linux-amd64
+            dist/zfs-linux-amd64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
